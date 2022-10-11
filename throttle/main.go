@@ -62,15 +62,18 @@ func main() {
 
 	go func() {
 		defer cancel()
-		ticker := time.NewTicker(time.Second * 8)
+		ticker := time.NewTicker(time.Second * 30)
 		<-ticker.C
+		ticker.Stop()
 	}()
 
 	for {
+		if ctx.Err() != nil {
+			return
+		}
 		r, err := f(ctx, "my test")
 		if err != nil {
 			fmt.Println(err)
-			break
 		} else {
 			fmt.Println(r)
 		}
