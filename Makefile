@@ -12,4 +12,8 @@ build_retry:
 	echo "*** Building retry"
 	cd ${PROJ_ROOT}/retry && go build -o ./bin/retry ./
 
-build: build_circuitbreaker build_throttle build_retry
+build_timeout:
+	echo "*** Building timeout"
+	cd ${PROJ_ROOT}/timeout && go build -o ./bin/timeout ./
+
+build: build_circuitbreaker build_throttle build_retry build_timeout
