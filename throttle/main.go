@@ -8,15 +8,15 @@ import (
 	"time"
 )
 
-type effector func(context.Context, string) (string, error)
+type throttleWrapper func(context.Context, string) (string, error)
 
-type effectee func(string) (string, error)
+type effector func(string) (string, error)
 
 func demo(s string) (string, error) {
 	return s, nil
 }
 
-func throttle(effee effectee, max int, d time.Duration) effector {
+func throttle(e effector, max int, d time.Duration) throttleWrapper {
 	count := 0
 	var once sync.Once
 	effer := func(ctx context.Context, s string) (string, error) {
@@ -46,7 +46,7 @@ func throttle(effee effectee, max int, d time.Duration) effector {
 
 		count++
 
-		res, err := effee(s)
+		res, err := e(s)
 		if err != nil {
 			return "", err
 		}

@@ -23,7 +23,7 @@ func demo(s string) (string, error) {
 	return s, nil
 }
 
-func breaker(circuit Circuit, maxFailures int, d time.Duration) Breaker {
+func CircuitBreaker(circuit Circuit, maxFailures int, d time.Duration) Breaker {
 	var consecutiveFailures int = 0
 	var lastAttempt = time.Now()
 	var m sync.RWMutex
@@ -59,7 +59,7 @@ func breaker(circuit Circuit, maxFailures int, d time.Duration) Breaker {
 
 }
 func main() {
-	f := breaker(demo, 2, time.Second*5)
+	f := CircuitBreaker(demo, 2, time.Second*5)
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func() {
