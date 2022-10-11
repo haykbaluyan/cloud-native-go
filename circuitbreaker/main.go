@@ -12,15 +12,16 @@ type Breaker func(context.Context, string) (string, error)
 
 type Circuit func(string) (string, error)
 
-var count = 0
+func demo() func(string) (string, error) {
+	count := 0
+	return func(s string) (string, error) {
+		count++
+		if count < 4 {
+			return "", errors.New("something went wrong")
+		}
 
-func demo(s string) (string, error) {
-	count++
-	if count < 4 {
-		return "", errors.New("something wrong happened")
+		return s, nil
 	}
-
-	return s, nil
 }
 
 func CircuitBreaker(circuit Circuit, maxFailures int, d time.Duration) Breaker {
@@ -28,7 +29,7 @@ func CircuitBreaker(circuit Circuit, maxFailures int, d time.Duration) Breaker {
 	var lastAttempt = time.Now()
 	var m sync.RWMutex
 
-	br := func(ctx context.Context, s string) (string, error) {
+	return func(ctx context.Context, s string) (string, error) {
 		if ctx.Err() != nil {
 			return "", ctx.Err()
 		}
@@ -55,11 +56,10 @@ func CircuitBreaker(circuit Circuit, maxFailures int, d time.Duration) Breaker {
 		consecutiveFailures = 0
 		return res, nil
 	}
-	return br
-
 }
+
 func main() {
-	f := CircuitBreaker(demo, 2, time.Second*5)
+	f := CircuitBreaker(demo(), 2, time.Second*5)
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func() {

@@ -19,9 +19,8 @@ func demo(s string) (string, error) {
 func throttle(e effector, max int, d time.Duration) throttleWrapper {
 	count := 0
 	var once sync.Once
-	effer := func(ctx context.Context, s string) (string, error) {
+	return func(ctx context.Context, s string) (string, error) {
 		if ctx.Err() != nil {
-			fmt.Println("context here")
 			return "", ctx.Err()
 		}
 
@@ -53,8 +52,6 @@ func throttle(e effector, max int, d time.Duration) throttleWrapper {
 
 		return res, nil
 	}
-	return effer
-
 }
 func main() {
 	f := throttle(demo, 2, time.Second*10)
