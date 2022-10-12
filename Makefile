@@ -24,4 +24,8 @@ build_fanout:
 	echo "*** Building fan out"
 	cd ${PROJ_ROOT}/fanout && go build -o ./bin/fanout ./
 
-build: build_circuitbreaker build_throttle build_retry build_timeout build_fanin build_fanout
+build_future:
+	echo "*** Building future"
+	cd ${PROJ_ROOT}/future && go build -o ./bin/future ./
+
+build: build_circuitbreaker build_throttle build_retry build_timeout build_fanin build_fanout build_future
