@@ -53,6 +53,7 @@ func throttle(e effector, max int, d time.Duration) throttleWrapper {
 		return res, nil
 	}
 }
+
 func main() {
 	f := throttle(demo, 2, time.Second*10)
 	ctx, cancel := context.WithCancel(context.Background())

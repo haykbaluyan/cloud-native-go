@@ -16,4 +16,8 @@ build_timeout:
 	echo "*** Building timeout"
 	cd ${PROJ_ROOT}/timeout && go build -o ./bin/timeout ./
 
-build: build_circuitbreaker build_throttle build_retry build_timeout
+build_fanin:
+	echo "*** Building fan in"
+	cd ${PROJ_ROOT}/fanin && go build -o ./bin/fanin ./
+
+build: build_circuitbreaker build_throttle build_retry build_timeout build_fanin
